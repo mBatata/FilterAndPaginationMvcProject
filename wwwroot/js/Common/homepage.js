@@ -14,7 +14,6 @@ export class HomePage {
 	static #extraInformationQueryStringKey = "extraInformation";
 
     static init = () => {
-        debugger;
         const searchFilterButtons = document.querySelectorAll(this.#filterButtonsSelector);
         const paginatorButtons = document.querySelectorAll(this.#paginatorButtonsSelector);
 
