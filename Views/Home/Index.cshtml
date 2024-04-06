@@ -1,0 +1,72 @@
+﻿@model HomepageModel;
+@{
+    ViewData["Title"] = "Home Page";
+    var totalPages = Model.PaginatedResult.TotalPages;
+}
+
+<section id="SearchFilters">
+    <div class="form-group">
+        @Html.LabelFor(m => m.FirstAndLastNameFilter, "First And Last Name:")
+        @Html.TextBoxFor(m => m.FirstAndLastNameFilter, null, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SortBy, "Sort By:")
+        @Html.DropDownListFor(m => m.SortBy, Model.SortByOptions, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ExtraInformationFilter, "Extra Information:")
+        @Html.TextBoxFor(m => m.ExtraInformationFilter, null, new { @class = "form-control" })
+    </div>
+    <button type="button" class="btn btn-primary" data-action="filter">Search</button>
+</section>
+
+<section id="Results">
+    @if (Model.PaginatedResult.TotalResults == 0)
+    {
+        <label>No results found!</label>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var data in Model.PaginatedResult.PaginatedValues)
+                {
+                    <tr>
+                        <th scope="row">@data.Number</th>
+                        <td>@data.FirstName</td>
+                        <td>@data.LastName</td>
+                        <td>@data.ExtraInformation</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</section>
+
+@if (totalPages > 1)
+{
+    <section id="Paginator">
+        <button class="btn btn-primary @(Model.PaginatedResult.CurrentPage == 1 ? "disabled" : null)" data-pagenumber="@(Model.PaginatedResult.CurrentPage - 1)" data-action="paginator">
+            &lt;
+        </button>
+
+        @for (var pageNumber = 1; pageNumber <= totalPages; pageNumber++)
+        {
+            <button class="btn btn-primary @(Model.PaginatedResult.CurrentPage == pageNumber ? "disabled" : null)" data-pagenumber="@pageNumber" data-action="paginator">
+                @pageNumber
+            </button>
+        }
+
+        <button class="btn btn-primary @(Model.PaginatedResult.CurrentPage == totalPages ? "disabled" : null)" data-pagenumber="@(Model.PaginatedResult.CurrentPage + 1)" data-action="paginator">
+            &gt;
+        </button>
+    </section>
+}
